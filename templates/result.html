@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+
+{% block title %}Quiz Results - Quiz App{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-body p-4 text-center">
+                <div class="display-icon mb-3">
+                    {% if percentage >= 80 %}
+                        <span class="icon-bg bg-success text-white"><i class="fas fa-trophy fa-3x"></i></span>
+                    {% elif percentage >= 60 %}
+                        <span class="icon-bg bg-primary text-white"><i class="fas fa-medal fa-3x"></i></span>
+                    {% elif percentage >= 40 %}
+                        <span class="icon-bg bg-warning text-dark"><i class="fas fa-star fa-3x"></i></span>
+                    {% else %}
+                        <span class="icon-bg bg-danger text-white"><i class="fas fa-book-reader fa-3x"></i></span>
+                    {% endif %}
+                </div>
+                
+                <h1 class="display-4 fw-bold mb-3">{{ percentage }}%</h1>
+                <h4 class="mb-4">{{ message }}</h4>
+                
+                <div class="row justify-content-center mb-4">
+                    <div class="col-md-8">
+                        <div class="p-3 bg-light rounded">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="fw-bold">Total Questions:</span>
+                                <span>{{ total }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="fw-bold">Correct Answers:</span>
+                                <span class="text-success">{{ score }}</span>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span class="fw-bold">Incorrect Answers:</span>
+                                <span class="text-danger">{{ total - score }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="d-flex justify-content-center gap-3">
+                    <a href="{{ url_for('quiz.dashboard') }}" class="btn btn-primary">
+                        <i class="fas fa-tachometer-alt me-1"></i> Dashboard
+                    </a>
+                    <a href="{{ url_for('quiz.start_quiz') }}" class="btn btn-outline-primary">
+                        <i class="fas fa-redo me-1"></i> Take Another Quiz
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-light">
+                <h5 class="mb-0">
+                    <i class="fas fa-clipboard-check me-2"></i>Question Review
+                </h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="accordion" id="questionAccordion">
+                    {% for result in results %}
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="heading{{ loop.index }}">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" 
+                                    data-bs-target="#collapse{{ loop.index }}" aria-expanded="false" 
+                                    aria-controls="collapse{{ loop.index }}">
+                                <div class="d-flex align-items-center w-100">
+                                    <div class="me-3">
+                                        {% if result.is_correct %}
+                                            <span class="badge bg-success"><i class="fas fa-check"></i></span>
+                                        {% else %}
+                                            <span class="badge bg-danger"><i class="fas fa-times"></i></span>
+                                        {% endif %}
+                                    </div>
+                                    <div class="text-truncate">{{ result.question }}</div>
+                                </div>
+                            </button>
+                        </h2>
+                        <div id="collapse{{ loop.index }}" class="accordion-collapse collapse" 
+                             aria-labelledby="heading{{ loop.index }}" data-bs-parent="#questionAccordion">
+                            <div class="accordion-body">
+                                <p class="mb-3">{{ result.question }}</p>
+                                
+                                <div class="mb-3">
+                                    <div class="fw-bold mb-1">Your Answer:</div>
+                                    <div class="p-2 rounded {% if result.is_correct %}bg-success bg-opacity-10 text-success{% else %}bg-danger bg-opacity-10 text-danger{% endif %}">
+                                        {{ result.user_answer }}
+                                    </div>
+                                </div>
+                                
+                                {% if not result.is_correct %}
+                                <div>
+                                    <div class="fw-bold mb-1">Correct Answer:</div>
+                                    <div class="p-2 rounded bg-success bg-opacity-10 text-success">
+                                        {{ result.correct_answer }}
+                                    </div>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .display-icon {
+        margin: 0 auto;
+    }
+    
+    .icon-bg {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+    }
+    
+    .accordion-button:not(.collapsed) {
+        background-color: rgba(13, 110, 253, 0.05);
+        color: #0d6efd;
+    }
+    
+    .accordion-button:focus {
+        box-shadow: none;
+    }
+    
+    .accordion-button.collapsed::after {
+        background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%230d6efd'%3e%3cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3e%3c/svg%3e");
+    }
+</style>
+{% endblock %}

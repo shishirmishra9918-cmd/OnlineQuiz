@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+{% block title %}Add Question - Quiz App{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="fas fa-plus-circle me-2"></i>Add New Question</h4>
+            </div>
+            <div class="card-body p-4">
+                <form method="POST" action="{{ url_for('admin.add_question') }}" class="needs-validation" novalidate>
+                    <div class="mb-4">
+                        <label for="question" class="form-label">Question</label>
+                        <textarea class="form-control" id="question" name="question" rows="2" required>{{ question|default('') }}</textarea>
+                        <div class="invalid-feedback">
+                            Please enter the question.
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="option_a" class="form-label">Option A</label>
+                            <input type="text" class="form-control" id="option_a" name="option_a" value="{{ option_a|default('') }}" required>
+                            <div class="invalid-feedback">
+                                Please enter option A.
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="option_b" class="form-label">Option B</label>
+                            <input type="text" class="form-control" id="option_b" name="option_b" value="{{ option_b|default('') }}" required>
+                            <div class="invalid-feedback">
+                                Please enter option B.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="option_c" class="form-label">Option C</label>
+                            <input type="text" class="form-control" id="option_c" name="option_c" value="{{ option_c|default('') }}" required>
+                            <div class="invalid-feedback">
+                                Please enter option C.
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="option_d" class="form-label">Option D</label>
+                            <input type="text" class="form-control" id="option_d" name="option_d" value="{{ option_d|default('') }}" required>
+                            <div class="invalid-feedback">
+                                Please enter option D.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="correct_ans" class="form-label">Correct Answer</label>
+                        <select class="form-select" id="correct_ans" name="correct_ans" required>
+                            <option value="" disabled selected>Select the correct answer</option>
+                            <option value="{{ option_a|default('') }}" id="select_a">Option A</option>
+                            <option value="{{ option_b|default('') }}" id="select_b">Option B</option>
+                            <option value="{{ option_c|default('') }}" id="select_c">Option C</option>
+                            <option value="{{ option_d|default('') }}" id="select_d">Option D</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Please select the correct answer.
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ url_for('admin.questions') }}" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-1"></i> Back
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-1"></i> Save Question
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Update the select options when the option inputs change
+        const optionA = document.getElementById('option_a');
+        const optionB = document.getElementById('option_b');
+        const optionC = document.getElementById('option_c');
+        const optionD = document.getElementById('option_d');
+        
+        const selectA = document.getElementById('select_a');
+        const selectB = document.getElementById('select_b');
+        const selectC = document.getElementById('select_c');
+        const selectD = document.getElementById('select_d');
+        
+        optionA.addEventListener('input', function() {
+            selectA.value = this.value;
+            selectA.innerText = `Option A: ${this.value}`;
+        });
+        
+        optionB.addEventListener('input', function() {
+            selectB.value = this.value;
+            selectB.innerText = `Option B: ${this.value}`;
+        });
+        
+        optionC.addEventListener('input', function() {
+            selectC.value = this.value;
+            selectC.innerText = `Option C: ${this.value}`;
+        });
+        
+        optionD.addEventListener('input', function() {
+            selectD.value = this.value;
+            selectD.innerText = `Option D: ${this.value}`;
+        });
+    });
+</script>
+{% endblock %}

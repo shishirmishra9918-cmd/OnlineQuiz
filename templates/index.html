@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+{% block title %}Quiz App - Home{% endblock %}
+
+{% block content %}
+<div class="row align-items-center min-vh-75">
+    <div class="col-lg-6">
+        <div class="py-5">
+            <h1 class="display-4 fw-bold text-primary mb-4">Test Your Knowledge</h1>
+            <p class="lead mb-4">
+                Welcome to Quiz App, where learning meets fun! Challenge yourself with our interactive quizzes and track your progress over time.
+            </p>
+            <div class="features mb-5">
+                <div class="d-flex align-items-center mb-3">
+                    <div class="bg-primary bg-opacity-10 p-3 rounded-circle me-3">
+                        <i class="fas fa-brain text-primary"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-1">Engaging Quizzes</h5>
+                        <p class="text-muted mb-0">Test your knowledge with our diverse range of questions</p>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center mb-3">
+                    <div class="bg-success bg-opacity-10 p-3 rounded-circle me-3">
+                        <i class="fas fa-chart-line text-success"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-1">Track Progress</h5>
+                        <p class="text-muted mb-0">Monitor your scores and see your improvement over time</p>
+                    </div>
+                </div>
+                <div class="d-flex align-items-center">
+                    <div class="bg-info bg-opacity-10 p-3 rounded-circle me-3">
+                        <i class="fas fa-medal text-info"></i>
+                    </div>
+                    <div>
+                        <h5 class="mb-1">Earn Achievements</h5>
+                        <p class="text-muted mb-0">Challenge yourself and celebrate your success</p>
+                    </div>
+                </div>
+            </div>
+            <div class="d-grid gap-2 d-md-flex">
+                {% if session.get('user_id') %}
+                    {% if session.get('is_admin') %}
+                        <a href="{{ url_for('admin.dashboard') }}" class="btn btn-primary btn-lg px-4 me-md-2">Admin Dashboard</a>
+                    {% else %}
+                        <a href="{{ url_for('quiz.start_quiz') }}" class="btn btn-primary btn-lg px-4 me-md-2">Start Quiz</a>
+                        <a href="{{ url_for('quiz.dashboard') }}" class="btn btn-outline-primary btn-lg px-4">My Dashboard</a>
+                    {% endif %}
+                {% else %}
+                    <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-lg px-4 me-md-2">Register Now</a>
+                    <a href="{{ url_for('auth.login') }}" class="btn btn-outline-primary btn-lg px-4">Login</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6 d-none d-lg-block">
+        <div class="text-center">
+            <img src="https://images.pexels.com/photos/3771074/pexels-photo-3771074.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=2" alt="Quiz Image" class="img-fluid rounded shadow-lg" style="max-height: 500px;">
+        </div>
+    </div>
+</div>
+
+<div class="row my-5 py-5 bg-light rounded-3">
+    <div class="col-12 text-center mb-4">
+        <h2 class="fw-bold">How it Works</h2>
+        <p class="text-muted">Three simple steps to test your knowledge</p>
+    </div>
+    <div class="col-md-4 mb-4 mb-md-0">
+        <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body text-center p-4">
+                <div class="rounded-circle bg-primary bg-opacity-10 mx-auto mb-4 d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                    <i class="fas fa-user-plus fa-2x text-primary"></i>
+                </div>
+                <h4>1. Create Account</h4>
+                <p class="text-muted">Register with your email to access all our quizzes</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4 mb-md-0">
+        <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body text-center p-4">
+                <div class="rounded-circle bg-success bg-opacity-10 mx-auto mb-4 d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                    <i class="fas fa-edit fa-2x text-success"></i>
+                </div>
+                <h4>2. Take Quizzes</h4>
+                <p class="text-muted">Answer multiple-choice questions from various categories</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body text-center p-4">
+                <div class="rounded-circle bg-info bg-opacity-10 mx-auto mb-4 d-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+                    <i class="fas fa-chart-pie fa-2x text-info"></i>
+                </div>
+                <h4>3. See Results</h4>
+                <p class="text-muted">Get instant feedback and track your performance</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

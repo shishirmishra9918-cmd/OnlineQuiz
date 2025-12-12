@@ -1,0 +1,144 @@
+{% extends 'base.html' %}
+
+{% block title %}Edit Question - Quiz App{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card border-0 shadow-sm">
+            <div class="card-header bg-primary text-white">
+                <h4 class="mb-0"><i class="fas fa-edit me-2"></i>Edit Question</h4>
+            </div>
+            <div class="card-body p-4">
+                <form method="POST" action="{{ url_for('admin.edit_question', question_id=question.id) }}" class="needs-validation" novalidate>
+                    <div class="mb-4">
+                        <label for="question" class="form-label">Question</label>
+                        <textarea class="form-control" id="question" name="question" rows="2" required>{{ question.question }}</textarea>
+                        <div class="invalid-feedback">
+                            Please enter the question.
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="option_a" class="form-label">Option A</label>
+                            <input type="text" class="form-control" id="option_a" name="option_a" value="{{ question.option_a }}" required>
+                            <div class="invalid-feedback">
+                                Please enter option A.
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="option_b" class="form-label">Option B</label>
+                            <input type="text" class="form-control" id="option_b" name="option_b" value="{{ question.option_b }}" required>
+                            <div class="invalid-feedback">
+                                Please enter option B.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="option_c" class="form-label">Option C</label>
+                            <input type="text" class="form-control" id="option_c" name="option_c" value="{{ question.option_c }}" required>
+                            <div class="invalid-feedback">
+                                Please enter option C.
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="option_d" class="form-label">Option D</label>
+                            <input type="text" class="form-control" id="option_d" name="option_d" value="{{ question.option_d }}" required>
+                            <div class="invalid-feedback">
+                                Please enter option D.
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label for="correct_ans" class="form-label">Correct Answer</label>
+                        <select class="form-select" id="correct_ans" name="correct_ans" required>
+                            <option value="" disabled>Select the correct answer</option>
+                            <option value="{{ question.option_a }}" {% if question.correct_ans == question.option_a %}selected{% endif %}>
+                                Option A: {{ question.option_a }}
+                            </option>
+                            <option value="{{ question.option_b }}" {% if question.correct_ans == question.option_b %}selected{% endif %}>
+                                Option B: {{ question.option_b }}
+                            </option>
+                            <option value="{{ question.option_c }}" {% if question.correct_ans == question.option_c %}selected{% endif %}>
+                                Option C: {{ question.option_c }}
+                            </option>
+                            <option value="{{ question.option_d }}" {% if question.correct_ans == question.option_d %}selected{% endif %}>
+                                Option D: {{ question.option_d }}
+                            </option>
+                        </select>
+                        <div class="invalid-feedback">
+                            Please select the correct answer.
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between">
+                        <a href="{{ url_for('admin.questions') }}" class="btn btn-outline-secondary">
+                            <i class="fas fa-arrow-left me-1"></i> Back
+                        </a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save me-1"></i> Update Question
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Update the select options when the option inputs change
+        const optionA = document.getElementById('option_a');
+        const optionB = document.getElementById('option_b');
+        const optionC = document.getElementById('option_c');
+        const optionD = document.getElementById('option_d');
+        
+        const correctAns = document.getElementById('correct_ans');
+        const options = correctAns.options;
+        
+        function updateSelect() {
+            // Get the currently selected value
+            const selectedValue = correctAns.value;
+            
+            // Update all options
+            options[1].value = optionA.value;
+            options[1].innerText = `Option A: ${optionA.value}`;
+            
+            options[2].value = optionB.value;
+            options[2].innerText = `Option B: ${optionB.value}`;
+            
+            options[3].value = optionC.value;
+            options[3].innerText = `Option C: ${optionC.value}`;
+            
+            options[4].value = optionD.value;
+            options[4].innerText = `Option D: ${optionD.value}`;
+            
+            // Try to keep the same option selected if it still exists
+            let optionFound = false;
+            for (let i = 1; i < options.length; i++) {
+                if (options[i].value === selectedValue) {
+                    correctAns.selectedIndex = i;
+                    optionFound = true;
+                    break;
+                }
+            }
+            
+            // If the selected option doesn't exist anymore, select the first option
+            if (!optionFound && options.length > 1) {
+                correctAns.selectedIndex = 1;
+            }
+        }
+        
+        optionA.addEventListener('input', updateSelect);
+        optionB.addEventListener('input', updateSelect);
+        optionC.addEventListener('input', updateSelect);
+        optionD.addEventListener('input', updateSelect);
+    });
+</script>
+{% endblock %}
